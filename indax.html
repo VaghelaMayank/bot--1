@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hocco AI Diet Bot</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px; }
+    #chatbox { width: 100%; max-width: 600px; margin: auto; background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .message { padding: 10px; margin: 10px 0; border-radius: 5px; }
+    .bot { background: #e0f7fa; color: #00695c; }
+    .user { background: #c8e6c9; color: #2e7d32; text-align: right; }
+    #inputArea { display: flex; gap: 10px; margin-top: 20px; }
+    input, select, button { padding: 10px; font-size: 16px; }
+    button { background: #00796b; color: white; border: none; cursor: pointer; }
+    button:hover { background: #004d40; }
+  </style>
+</head>
+<body>
+
+<div id="chatbox">
+  <div class="message bot">👋 Hi! I'm your Hocco Diet Assistant. What's your health goal?</div>
+  <div id="chat"></div>
+
+  <div id="inputArea">
+    <select id="goal">
+      <option value="">-- Select Goal --</option>
+      <option value="weight_loss">Weight Loss</option>
+      <option value="weight_gain">Weight Gain</option>
+      <option value="diabetes">Diabetes-Friendly</option>
+      <option value="high_protein">High Protein</option>
+    </select>
+    <button onclick="getDietPlan()">Get Plan</button>
+  </div>
+</div>
+
+<script>
+const orderUrl = "https://www.zomato.com/ahmedabad/hocco-eatery-1-vastrapur/order";
+
+const menu = {
+  weight_loss: [
+    { name: "Chana Kulcha", link: orderUrl },
+    { name: "Vegetable Cutlets", link: orderUrl },
+    { name: "Masala Chaas", link: orderUrl }
+  ],
+  weight_gain: [
+    { name: "Paneer Taka Tak Burger", link: orderUrl },
+    { name: "Cheese & Herb Rice", link: orderUrl },
+    { name: "Butter Pulao", link: orderUrl }
+  ],
+  diabetes: [
+    { name: "Paneer Taka Tak Sandwich", link: orderUrl },
+    { name: "Chana Kulcha", link: orderUrl },
+    { name: "Masala Chaas", link: orderUrl }
+  ],
+  high_protein: [
+    { name: "Lucknawi Paneer Biryani", link: orderUrl },
+    { name: "Paneer Taka Tak Burger", link: orderUrl },
+    { name: "Chana Puri Combo", link: orderUrl }
+  ]
+};
+
+function getDietPlan() {
+  const goal = document.getElementById("goal").value;
+  if (!goal) {
+    alert("Please select a goal.");
+    return;
+  }
+
+  const userMsg = document.createElement("div");
+  userMsg.className = "message user";
+  userMsg.textContent = "My goal is: " + goal.replace("_", " ");
+  document.getElementById("chat").appendChild(userMsg);
+
+  const botMsg = document.createElement("div");
+  botMsg.className = "message bot";
+
+  const plan = menu[goal];
+  if (!plan) {
+    botMsg.innerHTML = "Sorry, I don't have a plan for that yet.";
+  } else {
+    botMsg.innerHTML = `
+      🍽 Here’s your Hocco meal plan:<br><br>
+      <b>Breakfast:</b> ${plan[0].name} <a href="${plan[0].link}" target="_blank">[Order]</a><br>
+      <b>Lunch:</b> ${plan[1].name} <a href="${plan[1].link}" target="_blank">[Order]</a><br>
+      <b>Dinner:</b> ${plan[2].name} <a href="${plan[2].link}" target="_blank">[Order]</a>
+    `;
+  }
+
+  document.getElementById("chat").appendChild(botMsg);
+}
+</script>
+
+</body>
+</html>
